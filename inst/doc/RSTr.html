@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>An Introduction to the RSTr Package</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">An Introduction to the RSTr Package</h1>
+
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>The RSTr package is a tool that provides a host of Bayesian
+spatiotemporal models in conjunction with C++ to quickly and easily
+generate spatially-smoothed age-standardized estimates for your spatial
+data. This vignette introduces you to the basics of the RSTr package and
+shows you how to apply the basic functions to the included example data
+to get small area estimates.</p>
+</div>
+<div id="models" class="section level2">
+<h2>Models</h2>
+<p>The models provided in the RSTr package are based on the <a href="https://link.springer.com/article/10.1007/bf00116466">Besag, York,
+and Mollié (1991)</a> Conditional Autoregressive (CAR) model, which
+spatially smooths data by incorporating information such as event and
+population counts from neighboring geographic units (counties, census
+tracts, etc.). The degree of spatial smoothing is determined by a
+spatial region’s respective population size. The CAR model can be
+extended to several levels of complexity, depending on the input
+data:</p>
+<ul>
+<li><p>BYM CAR (CAR): Spatially smooths across geographies;</p></li>
+<li><p>Restricted CAR (RCAR): Spatially smooths across geographies and
+prevents over-smoothing;</p></li>
+<li><p>Multivariate CAR (MCAR): Spatially smooths across geographies and
+sociodemographic groups; and</p></li>
+<li><p>Multivariate Spatiotemporal CAR (MSTCAR): Spatially smooths
+across geographies, sociodemographic groups, and time periods.</p></li>
+</ul>
+<p>For this vignette, we will demonstrate RSTr’s functionality with an
+MSTCAR model.</p>
+<div id="restricted-models-to-prevent-over-smoothing" class="section level3">
+<h3>Restricted models to prevent over-smoothing</h3>
+<p>A problem with CAR models pointed out by <a href="https://pubmed.ncbi.nlm.nih.gov/33980402/">Quick, et
+al. (2021)</a> is that of over-smoothing due to the informativeness of
+the BYM model. The RSTr package provides enhancements to the CAR models
+for both Poisson- and binomial-distributed data that prevent
+over-smoothing by restricting model informativeness through the
+<code>rcar()</code> function. Enhancements for the MCAR and MSTCAR
+models are under progress, and will be incorporated into the RSTr
+package as they are developed.</p>
+<p>To learn more about restricted CAR models, read
+<code>vignette(&quot;RSTr-informativeness&quot;)</code>.</p>
+</div>
+</div>
+<div id="datasets" class="section level2">
+<h2>Datasets</h2>
+<p>RSTr comes with three main datasets: <code>miheart</code>,
+<code>miadj</code>, and <code>mishp</code>. <code>miheart</code> and
+<code>miadj</code> are related to the necessary components of our
+models, and <code>mishp</code> is a shapefile that helps map your
+results. To run an MSTCAR model, two components are necessary:</p>
+<ul>
+<li><p>Event counts for a parameter of interest, stratified by region,
+group, and time period, and its corresponding population counts. These
+data may be binomial- or Poisson-distributed. The example dataset is
+binomial-distributed myocardial infarction deaths in six age groups from
+1979-1988 in Michigan. Reference <code>miheart</code> to see how this
+data looks or <code>?miheart</code> for more information on the dataset.
+For more information on preparing your event data, read
+<code>vignette(&quot;RSTr-event&quot;)</code>.</p></li>
+<li><p>An adjacency structure for your data. This is a <code>list</code>
+that tells RSTr which regions are neighbors of one other based on their
+region index (i.e., the order they appear in the dataset). Reference
+<code>miadj</code> for an example adjacency structure list. For more
+information on preparing your adjacency data, read
+<code>vignette(&quot;RSTr-adjacency&quot;)</code>.</p></li>
+</ul>
+<p>Some quick notes about data setup:</p>
+<ul>
+<li><p>Event/population data must be organized in a very specific
+manner. RSTr’s models can accept up to three-dimensional arrays: in the
+MSTCAR model, for example, spatial regions must be on the rows,
+socio/demographic groups must be on the columns, and time periods must
+be on the matrix slices. Additionally, your event data’s regions should
+be listed in the same order in your adjacency structure data.</p></li>
+<li><p>Every region must have at least one neighbor. The adjacency
+structures must be listed in the same order as your count data.</p></li>
+</ul>
+</div>
+<div id="functions" class="section level2">
+<h2>Functions</h2>
+<p>RSTr comes with a set of functions to generate small area estimates
+from your dataset. Here is a brief overview of the basic functions and
+their purpose:</p>
+<ul>
+<li><code>*car()</code>: Inputs data and model specifics and creates a
+local folder with all associated files to prepare for sample
+generation;</li>
+<li><code>age_standardize()</code>: Generates age-standardized estimates
+based on user-specified age groups;</li>
+<li><code>suppress_estimates()</code>: Suppresses estimates based on
+reliability criteria; and</li>
+<li><code>get_estimates()</code>: Creates a long <code>table</code>
+containing information on each region/group/time in the model.</li>
+</ul>
+</div>
+<div id="example-model" class="section level2">
+<h2>Example Model</h2>
+<div id="mstcar" class="section level3">
+<h3><code>mstcar()</code></h3>
+<p>With an understanding of the example datasets and the functions, we
+can start running our first model. The example datasets are set up to
+run out-of-the-box:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">mstcar</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&quot;my_test_model&quot;</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">data =</span> miheart,</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">adjacency =</span> miadj,</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">dir =</span> <span class="fu">tempdir</span>(),</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">1234</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># For computational reasons, full model fitting is not run during CRAN checks.</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># When building on CRAN, this vignette loads a pre-fitted example model included with the package.</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co"># The pkgdown website shows the full model-fitting workflow.</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>example_dir <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="at">package =</span> <span class="st">&quot;RSTr&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">load_model</span>(<span class="st">&quot;mstcar_example&quot;</span>, example_dir)</span></code></pre></div>
+<p>Here, we use the <code>mstcar()</code> function to specify our model.
+<code>mstcar()</code> accepts a few different arguments in this
+case:</p>
+<ul>
+<li>The <code>name</code> argument specifies the folder where the model
+data lives;</li>
+<li>The <code>data</code> argument specifies event/population data;</li>
+<li>The <code>adjacency</code> argument specifies our adjacency
+structure;</li>
+<li>The <code>dir</code> argument specifies the directory where to save
+the folder; and</li>
+<li>The <code>seed</code> argument specifies a random seed for
+replicability purposes.</li>
+</ul>
+<p><code>mstcar()</code> creates a folder named
+<code>my_test_model</code> in R’s temporary directory containing folders
+that will hold batches of outputs for each parameter update.
+Additionally, an <code>RSTr</code> object which holds all information
+associated with the model (aside from samples) is created in the R
+environment and in the temporary directory. No samples are saved in the
+R environment because, given a sufficiently large dataset, MSTCAR models
+can become so large that it’s impossible to hold all the model samples
+in RAM. Therefore, all of the samples are saved locally. Should you want
+to save your model somewhere besides the temporary directory for future
+use, you can specify a folder with the <code>dir</code> argument.</p>
+<p>Note that <code>mstcar()</code> accepts more arguments than are used
+here, but these are the only ones needed to get started. Priors and
+initial values, for example, can be specified manually, but this is
+outside the scope of this vignette. There will also be checks performed
+on the input data: if something is wrong, warnings and error messages
+will tell you what is wrong and how to fix it. For a list of diagnostic
+errors and what they mean, read
+<code>vignette(&quot;RSTr-troubleshooting&quot;)</code>.</p>
+<p>The RSTr package works by generating samples in batches and saving
+them locally inside of the model directory to be retrieved once the
+model is finished running. Generating samples in batches helps
+facilitate the tuning of the underlying MCMC algorithm and helps avoid
+computational burden by only holding a fraction of the total samples in
+memory at any given time. RSTr runs 6,000 iterations split into 60
+batches of size 100 each. All batches are thinned for every 10
+iterations by default, as the <code>lambdas</code> (a.k.a., the rate
+estimates) tend to exhibit autocorrelation. Moreover, thinning saves
+space when writing samples to the hard drive, as batches from larger
+models can balloon to gigabytes of size before thinning.</p>
+<p>Console outputs will show the current batch number, the progress
+within that batch, and the elapsed time. The model <code>Rds</code> file
+will be updated as the sampler progresses in case you need to reload
+your model at a later date. If the model crashes for any reason or R
+closes while the model is being run, the model <code>Rds</code> file
+will keep track of the current batch and pick back up where it left off
+when re-run. While <code>mstcar()</code> is running, the R plot window
+will show traceplots from a selection of estimates to check stability
+and diagnose any potential issues.</p>
+<p>If you want to learn more about <code>mstcar()</code> and the other
+model functions, read <code>vignette(&quot;RSTr-car&quot;)</code>.</p>
+</div>
+<div id="get_estimates" class="section level3">
+<h3><code>get_estimates()</code></h3>
+<p><code>mstcar()</code> takes care of the vast majority of model
+preparation: within the function, the model is set up, samples are
+generated, and our medians are estimated. Once the function finishes, we
+can get an overview of our model:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>mod_mst</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; RSTr object:</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; Model name: mstcar_example </span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; Model type: MSTCAR </span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; Data likelihood: binomial </span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; Estimate Credible Interval: 95% </span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; Number of geographic units: 83 </span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; Number of samples: 3000 </span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; Estimates age-standardized: No </span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: No</span></span></code></pre></div>
+<p>Here, we get a birds-eye-view of the model, including the model we
+used (MSTCAR), the data likelihood type, the number of geographic units,
+and whether our estimates have been age-standardized or suppressed along
+reliability criteria. With the <code>get_estimates()</code> function, we
+can get a more detailed look at our estimates. For this type of
+mortality data, it is common to observe the rates per 100,000
+population, so we set the <code>rates_per</code> argument in
+<code>get_estimates()</code> to 1e5:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>mst_estimates <span class="ot">&lt;-</span> <span class="fu">get_estimates</span>(mod_mst, <span class="at">rates_per =</span> <span class="fl">1e5</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">head</span>(mst_estimates)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;   county group year  medians ci_lower ci_upper rel_prec events population</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; 1  26001 35-44 1979 41.09875 31.76009 47.11024 2.677417      1        964</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; 2  26003 35-44 1979 61.79864 50.74198 80.73919 2.060146      1       1011</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 3  26005 35-44 1979 23.44843 18.67969 28.12923 2.481436      0       9110</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 4  26007 35-44 1979 38.04293 26.32669 48.99415 1.678306      0       3650</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 5  26009 35-44 1979 36.87313 31.41068 44.70636 2.773316      0       1763</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 6  26011 35-44 1979 36.02715 32.00151 47.83611 2.275216      0       1470</span></span></code></pre></div>
+<p>The <code>mst_estimates</code> object contains in-depth information
+about our model estimates, including the medians, the credible
+intervals, the relative precisions, and the event/population counts;
+region, group, and time period columns are also provided.</p>
+</div>
+<div id="age_standardize" class="section level3">
+<h3><code>age_standardize()</code></h3>
+<p>One of the most important features of the RSTr package is the ability
+to easily generate age-standardized estimates. Let’s say we want to get
+age-standardized estimates for the 35-64 age group; for our model, we
+use the <code>age_standardize()</code> function, then specify the groups
+of interest, their associated standard populations, and the name we want
+to give them. Since we are using data from 1979-1988, we can use 1980
+standard populations from <a href="https://seer.cancer.gov/stdpopulations/stdpop.19ages.html">NIH</a>
+to generate a <code>std_pop</code> standard population vector:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>std_pop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">68775</span>, <span class="dv">34116</span>, <span class="dv">9888</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">age_standardize</span>(mod_mst, std_pop, <span class="at">new_name =</span> <span class="st">&quot;35-64&quot;</span>, <span class="at">groups =</span> <span class="fu">c</span>(<span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;45-54&quot;</span>, <span class="st">&quot;55-64&quot;</span>))</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>mod_mst</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; RSTr object:</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; Model name: mstcar_example </span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; Model type: MSTCAR </span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; Data likelihood: binomial </span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; Estimate Credible Interval: 95% </span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; Number of geographic units: 83 </span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Number of samples: 3000 </span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; Estimates age-standardized: Yes </span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Age-standardized groups: 35-64 </span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: No</span></span></code></pre></div>
+<p>Notice now that the <code>mod_mst</code> object indicates we have
+age-standardized our estimates and the names of our age-standardized
+groups.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>mst_estimates_as <span class="ot">&lt;-</span> <span class="fu">get_estimates</span>(mod_mst)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">head</span>(mst_estimates_as)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt;   county group year   medians  ci_lower  ci_upper rel_prec events population</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; 1  26001 35-64 1979 112.06334  91.81667 134.54504 2.622692      7       3353</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; 2  26003 35-64 1979 145.06894 122.97462 200.59999 1.868834     12       3105</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; 3  26005 35-64 1979  66.76366  59.88380  77.08016 3.882430     27      23926</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; 4  26007 35-64 1979  94.78308  80.02914 114.43762 2.754644     15      10000</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; 5  26009 35-64 1979 100.56027  88.18623 110.67138 4.472296     11       5152</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; 6  26011 35-64 1979 112.28314 102.10809 126.49672 4.603913      8       4517</span></span></code></pre></div>
+<p>Now, <code>get_estimates(mod_mst)</code> shows the age-standardized
+estimates. Should you want to see those instead, you can set the
+argument <code>standardized = FALSE</code>.</p>
+</div>
+<div id="suppress_estimates" class="section level3">
+<h3><code>suppress_estimates()</code></h3>
+<p>While the main benefit of RSTr is generating reliable estimates from
+small-population areas, we cannot guarantee that all estimates generated
+by <code>mstcar()</code> will be reliable. Therefore, it is prudent to
+suppress estimates that are deemed unreliable. For MSTCAR models, we can
+use two criteria to test for reliability: relative precision (i.e., the
+ratio of the median estimate to the width of its credible interval) and
+population count. For relative precisions, we aim for a value of at
+least 1 (i.e., the median is larger than the width of its credible
+interval), and for myocardial infarction death rates, we typically aim
+for a population threshold of at least 1,000. Using the
+<code>suppress_estimates()</code> function, we can generate suppressed
+estimates for our age-standardized rates:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">suppress_estimates</span>(mod_mst, <span class="at">threshold =</span> <span class="fl">1e3</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>mod_mst</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; RSTr object:</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; Model name: mstcar_example </span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Model type: MSTCAR </span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; Data likelihood: binomial </span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; Estimate Credible Interval: 95% </span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; Number of geographic units: 83 </span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; Number of samples: 3000 </span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; Estimates age-standardized: Yes </span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; Age-standardized groups: 35-64 </span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: Yes </span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; Number of reliable age-standardized rates: 820 / 830 (98.8%)</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>mst_estimates_as <span class="ot">&lt;-</span> <span class="fu">get_estimates</span>(mod_mst)</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="fu">head</span>(mst_estimates_as)</span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt;   county group year   medians medians_suppressed  ci_lower  ci_upper rel_prec</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; 1  26001 35-64 1979 112.06334          112.06334  91.81667 134.54504 2.622692</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; 2  26003 35-64 1979 145.06894          145.06894 122.97462 200.59999 1.868834</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt; 3  26005 35-64 1979  66.76366           66.76366  59.88380  77.08016 3.882430</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt; 4  26007 35-64 1979  94.78308           94.78308  80.02914 114.43762 2.754644</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; 5  26009 35-64 1979 100.56027          100.56027  88.18623 110.67138 4.472296</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; 6  26011 35-64 1979 112.28314          112.28314 102.10809 126.49672 4.603913</span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt;   events population</span></span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt; 1      7       3353</span></span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a><span class="co">#&gt; 2     12       3105</span></span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="co">#&gt; 3     27      23926</span></span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a><span class="co">#&gt; 4     15      10000</span></span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="co">#&gt; 5     11       5152</span></span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="co">#&gt; 6      8       4517</span></span></code></pre></div>
+<p><code>mod_mst</code> now shows us that our estimates are suppressed
+and indicates the number of reliable rates.</p>
+<p>If you want to learn more about <code>get_estimates()</code>,
+<code>age_standardize()</code>, and <code>suppress_estimates()</code>,
+read <code>vignette(&quot;RSTr-estimates&quot;)</code>.</p>
+</div>
+</div>
+<div id="illustrative-example-mapping-estimates" class="section level2">
+<h2>Illustrative Example: Mapping Estimates</h2>
+<p>We can get a better picture of the geographic patterns in our data
+with a map. Using <code>ggplot</code> (or your favorite mapping
+package), Let’s see how the (non-age-standardized) estimates were
+smoothed:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Original Myocardial Infarction Death Rates in MI, Ages 35-64, 1988</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>estimates_88 <span class="ot">&lt;-</span> mst_estimates_as[mst_estimates_as<span class="sc">$</span>year <span class="sc">==</span> <span class="st">&quot;1988&quot;</span>, ]</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>estimates_3564 <span class="ot">&lt;-</span> estimates_88[estimates_88<span class="sc">$</span>group <span class="sc">==</span> <span class="st">&quot;35-64&quot;</span>, ]</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>raw_3564 <span class="ot">&lt;-</span> (estimates_3564<span class="sc">$</span>events <span class="sc">/</span> estimates_3564<span class="sc">$</span>population <span class="sc">*</span> <span class="fl">1e5</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">ggplot</span>(mishp) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> raw_3564)) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Raw Myocardial Infarction Death Rates in MI, Ages 65 and up, 1988&quot;</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Deaths per 100,000&quot;</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>() <span class="sc">+</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co"># Spatially Smoothed MI Death Rates in MI</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>est_3564 <span class="ot">&lt;-</span> estimates_3564<span class="sc">$</span>medians</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="fu">ggplot</span>(mishp) <span class="sc">+</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> est_3564)) <span class="sc">+</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Smoothed Myocardial Infarction Death Rates in MI, Ages 35-64, 1988&quot;</span>,</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Deaths per 100,000&quot;</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>() <span class="sc">+</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<pre><code>#&gt; NULL</code></pre>
+<p>This map helps us see how RSTr smooths rates. First, notice how the
+range of the two plots are different: the smoothed map has a smaller
+range because RSTr stabilizes high and low extreme values which are
+usually caused by low population counts. Also, notice how the
+transitions between high-rate and low-rate regions are more gradual on
+the smoothed map. This is a consequence of using neighboring regions to
+inform and stabilize estimates.</p>
+<p>From here, we can get a better idea of how these maps contrast. For
+example, on the first map, the largest region of interest is the middle
+portion of the Lower Peninsula (LP), but on the smoothed map, much of
+this area has attenuated rates. On the flip side, many areas in the
+Upper Peninsula (UP) have relatively lower rates on the first map, but
+we can see on the smoothed map that the highest rate in the state is in
+the UP. The higher-rate areas on the LP are focused around counties on
+Saginaw Bay in the east, indicating that these areas may require more
+attention than previously thought. These are the kinds of inferences
+that can be made using estimates generated by the RSTr package and the
+main motivation for running this spatiotemporal model.</p>
+</div>
+<div id="closing-thoughts" class="section level2">
+<h2>Closing Thoughts</h2>
+<p>This vignette introduces you to inputting data into the
+<code>mstcar()</code> function, extracting estimates with the
+<code>get_estimates()</code> function, age-standardizing estimates with
+the <code>age_standardize()</code> function, suppressing estimates with
+the <code>suppress_estimates()</code> function, and finally making a map
+with estimates gathered from <code>get_estimates()</code> function. What
+we’ve discussed here is just scratching the surface of the RSTr package.
+Other package vignettes will dive deeper into the intricacies of each
+component of the package. All of these things together will ensure you
+get the most out of using RSTr.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
