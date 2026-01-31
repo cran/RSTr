@@ -2,8 +2,8 @@
 knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 library(RSTr)
 library(ggplot2)
-is_cran <- identical(Sys.getenv("NOT_CRAN"), "false")
-if (Sys.getenv("NOT_CRAN") == "") is_cran <- TRUE
+is_cran <- !identical(Sys.getenv("NOT_CRAN"), "true")
+
 
 ## ----eval = !is_cran, results = "hide", fig.keep = "last"---------------------
 # mod_mst <- mstcar(
@@ -14,7 +14,7 @@ if (Sys.getenv("NOT_CRAN") == "") is_cran <- TRUE
 #   seed = 1234
 # )
 
-## ----eval = is_cran-----------------------------------------------------------
+## ----eval = is_cran, echo = FALSE---------------------------------------------
 # For computational reasons, full model fitting is not run during CRAN checks.
 # When building on CRAN, this vignette loads a pre-fitted example model included with the package.
 # The pkgdown website shows the full model-fitting workflow.
@@ -51,7 +51,7 @@ head(mst_estimates_as)
 # ggplot(mishp) +
 #   geom_sf(aes(fill = raw_3564)) +
 #   labs(
-#     title = "Raw Myocardial Infarction Death Rates in MI, Ages 65 and up, 1988",
+#     title = "Raw Myocardial Infarction Death Rates in MI, Ages 35-64, 1988",
 #     fill = "Deaths per 100,000"
 #   ) +
 #   scale_fill_viridis_c() +

@@ -8,19 +8,23 @@
 #' @param neighs A vector of regions to mark as adjacent. Accepts a vector of indices or names assigned to \code{adjacency}.
 #' @returns A modified \code{adjacency} \code{list}.
 #' @examples
-#' mamap <- sf::st_as_sf(mamap[order(mamap$GEOID), ])
-#' ma_adj <- spdep::poly2nb(mamap)
-#' new_neighs <- c(1, 4, 10) # attach regions 1, 4, and 10
-#' ma_adj <- add_neighbors(ma_adj, new_neighs)
+#' if (requireNamespace("sf", quietly = TRUE) &&
+#'     requireNamespace("spdep", quietly = TRUE)) {
 #'
-#' # Add neighbors by FIPS code instead of index
-#' ma_adj <- suppressWarnings(spdep::poly2nb(mamap))
-#' names(ma_adj) <- mamap$GEOID
-#' ma_adj <- add_neighbors(ma_adj, neighs = c("25001", "25007", "25019"))
+#'   mamap <- sf::st_as_sf(mamap[order(mamap$GEOID), ])
+#'   ma_adj <- spdep::poly2nb(mamap)
+#'   new_neighs <- c(1, 4, 10) # attach regions 1, 4, and 10
+#'   ma_adj <- add_neighbors(ma_adj, new_neighs)
 #'
-#' ma_adj <- suppressWarnings(spdep::poly2nb(mamap))
-#' ma_adj <- add_neighbors(ma_adj, c(1, 4)) # only attach 1 and 4
-#' ma_adj <- add_neighbors(ma_adj, c(4, 10)) # only attach 4 and 10
+#'   # Add neighbors by FIPS code instead of index
+#'   ma_adj <- suppressWarnings(spdep::poly2nb(mamap))
+#'   names(ma_adj) <- mamap$GEOID
+#'   ma_adj <- add_neighbors(ma_adj, neighs = c("25001", "25007", "25019"))
+#'
+#'   ma_adj <- suppressWarnings(spdep::poly2nb(mamap))
+#'   ma_adj <- add_neighbors(ma_adj, c(1, 4)) # only attach 1 and 4
+#'   ma_adj <- add_neighbors(ma_adj, c(4, 10)) # only attach 4 and 10
+#' }
 #' @export
 add_neighbors <- function(adjacency, neighs) {
   if (is.character(neighs)) {
@@ -42,7 +46,10 @@ add_neighbors <- function(adjacency, neighs) {
     if (adjacency_card[neighbor] == 0) {
       adjacency[[neighbor]] <- integer(length = 0)
     }
-    adjacency[[neighbor]] <- union(adjacency[[neighbor]], neighs[-neighbor])
+    adjacency[[neighbor]] <- union(
+      adjacency[[neighbor]],
+      setdiff(neighs, neighbor)
+    )
   }
   as_nb(adjacency)
 }

@@ -3,14 +3,14 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-is_cran <- identical(Sys.getenv("NOT_CRAN"), "false")
-if (Sys.getenv("NOT_CRAN") == "") is_cran <- TRUE
+is_cran <- !identical(Sys.getenv("NOT_CRAN"), "true")
+
 library(RSTr)
 
 ## ----eval = !is_cran, results = "hide", fig.keep = "last"---------------------
 # mod_mst <- mstcar(name = "my_test_model", data = miheart, adjacency = miadj, seed = 1234, perc_ci = 0.95)
 
-## ----eval = is_cran-----------------------------------------------------------
+## ----eval = is_cran, echo = FALSE---------------------------------------------
 # For computational reasons, full model fitting is not run during CRAN checks.
 # When building on CRAN, this vignette loads a pre-fitted example model included with the package.
 # The pkgdown website shows the full model-fitting workflow.

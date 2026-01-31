@@ -3,8 +3,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-is_cran <- identical(Sys.getenv("NOT_CRAN"), "false")
-if (Sys.getenv("NOT_CRAN") == "") is_cran <- TRUE
+is_cran <- !identical(Sys.getenv("NOT_CRAN"), "true")
+
 library(RSTr)
 library(ggplot2)
 
@@ -12,7 +12,7 @@ library(ggplot2)
 # data_u <- lapply(miheart, \(x) x[, "55-64", "1979", drop = FALSE])
 # mod_car <- car("my_test_model", data_u, miadj, tempdir(), seed = 1234)
 
-## ----eval = is_cran-----------------------------------------------------------
+## ----eval = is_cran, echo = FALSE---------------------------------------------
 # For computational reasons, full model fitting is not run during CRAN checks.
 # When building on CRAN, this vignette loads a pre-fitted example model included with the package.
 # The pkgdown website shows the full model-fitting workflow.
@@ -30,7 +30,7 @@ abline(v = 10, col = "blue")
 ## ----eval = !is_cran, results = "hide", fig.keep = "last"---------------------
 # mod_rcar <- rcar("my_test_model", data_u, miadj, tempdir(), seed = 1234, A = 6)
 
-## ----eval = is_cran-----------------------------------------------------------
+## ----eval = is_cran, echo = FALSE---------------------------------------------
 # Same as above, but for RCAR model
 example_dir <- system.file("extdata", package = "RSTr")
 mod_rcar <- load_model("rcar_example", example_dir)

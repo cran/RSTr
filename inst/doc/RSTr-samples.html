@@ -359,11 +359,6 @@ of the convenience afforded to us by these wrapper functions.</p>
 <h2>The <code>load_samples()</code> function</h2>
 <p>To begin, let’s generate samples for a new model:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">mstcar</span>(<span class="at">name =</span> <span class="st">&quot;my_test_model&quot;</span>, <span class="at">data =</span> miheart, <span class="at">adjacency =</span> miadj, <span class="at">seed =</span> <span class="dv">1234</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># For computational reasons, full model fitting is not run during CRAN checks.</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># When building on CRAN, this vignette loads a pre-fitted example model included with the package.</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co"># The pkgdown website shows the full model-fitting workflow.</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>example_dir <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="at">package =</span> <span class="st">&quot;RSTr&quot;</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">load_model</span>(<span class="st">&quot;mstcar_example&quot;</span>, example_dir)</span></code></pre></div>
 <p>Once <code>mstcar()</code> tells you that the model is finished
 running, you can import samples into R using
 <code>load_samples()</code>. <code>load_samples()</code> takes in four
@@ -383,7 +378,7 @@ be applied to the samples as appropriate. Here, we pull in the
 2000-sample burn-in period (as specified by the default arguments). We
 also multiply by 100,000 as it is common to display mortality rates per
 100,000 individuals:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">load_samples</span>(mod_mst, <span class="at">param =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">burn =</span> <span class="dv">2000</span>) <span class="sc">*</span> <span class="fl">1e5</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">load_samples</span>(mod_mst, <span class="at">param =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">burn =</span> <span class="dv">2000</span>) <span class="sc">*</span> <span class="fl">1e5</span></span></code></pre></div>
 <div id="group-aggregation" class="section level3">
 <h3>Group aggregation</h3>
 <p>In many cases, we will want to aggregate our data across non-age
@@ -393,8 +388,8 @@ dataset, we have 10 years of data over which we can consolidate to look
 at prevalence. In these cases, we need to pull in the population array
 as a weight. First, we need to check which margin contains our year
 information using the <code>dim()</code> function:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">dim</span>(samples)</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; [1]  83   6  10 100</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">dim</span>(samples)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; [1] 83  6  3 20</span></span></code></pre></div>
 <p>Our <code>samples</code> array has four margins with dimensions
 <code>83</code>, <code>6</code>, <code>10</code>, and <code>400</code>,
 representing the spatial regions, age groups, time periods, and
@@ -404,15 +399,15 @@ to represent our time period margin and aggregate our
 <code>aggregate_samples()</code> function. The population data needed to
 weight our samples can be pulled from our <code>RSTr</code> model
 object:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>margin_time <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>pop <span class="ot">&lt;-</span> mod_mst<span class="sc">$</span>data<span class="sc">$</span>n</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>samples_7988 <span class="ot">&lt;-</span> <span class="fu">aggregate_samples</span>(samples, pop, margin_time)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>margin_time <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>pop <span class="ot">&lt;-</span> mod_mst<span class="sc">$</span>data<span class="sc">$</span>n</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>samples_7988 <span class="ot">&lt;-</span> <span class="fu">aggregate_samples</span>(samples, pop, margin_time)</span></code></pre></div>
 <p>Now, we have a standalone sample array for our 1988-1988 samples. But
 what if we are interested in both the individual year data <em>and</em>
 the prevalence data? We can alternatively bind these new samples to our
 main <code>samples</code> array by adding in values for the
 <code>bind_new</code> and <code>new_name</code> arguments:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">aggregate_samples</span>(samples, pop, margin_time, <span class="at">bind_new =</span> <span class="cn">TRUE</span>, <span class="at">new_name =</span> <span class="st">&quot;1979-1988&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">aggregate_samples</span>(samples, pop, margin_time, <span class="at">bind_new =</span> <span class="cn">TRUE</span>, <span class="at">new_name =</span> <span class="st">&quot;1979-1988&quot;</span>)</span></code></pre></div>
 <p>Group-aggregation is a feature unique to only samples;
 group-aggregation cannot be performed on model objects.</p>
 </div>
@@ -424,39 +419,38 @@ also use our samples to age-standardize these into a 35-64 group. Like
 before, since we are using data from 1988-1988, we can use 1980 standard
 populations from <a href="https://seer.cancer.gov/stdpopulations/stdpop.19ages.html">NIH</a>
 to generate a <code>std_pop</code> vector:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;45-54&quot;</span>, <span class="st">&quot;55-64&quot;</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>std_pop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">113154</span>, <span class="dv">100640</span>, <span class="dv">95799</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;45-54&quot;</span>, <span class="st">&quot;55-64&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>std_pop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">113154</span>, <span class="dv">100640</span>, <span class="dv">95799</span>)</span></code></pre></div>
 <p>With <code>std_pop</code> generated, we need to then check which
 margin contains our age group information using the <code>dim()</code>
 function:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">dim</span>(samples)</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; [1]  83   6  11 100</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">dim</span>(samples)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; [1] 83  6  4 20</span></span></code></pre></div>
 <p>Our age groups lay along the second margin. Let’s set a variable
 <code>margin_age</code> and standardize our <code>samples</code>
 estimates across ages 35-64 using the <code>standardize_samples()</code>
 function:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>margin_age <span class="ot">&lt;-</span> <span class="dv">2</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;45-54&quot;</span>, <span class="st">&quot;55-64&quot;</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>samples_3564 <span class="ot">&lt;-</span> <span class="fu">standardize_samples</span>(samples, std_pop, margin_age, groups)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>margin_age <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;45-54&quot;</span>, <span class="st">&quot;55-64&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>samples_3564 <span class="ot">&lt;-</span> <span class="fu">standardize_samples</span>(samples, std_pop, margin_age, groups)</span></code></pre></div>
 <p>Note that there may be times where you have groups stratified by both
 age and other sociodemographic groups. In these cases, you’ll have to
 refactor your sample array so that the age groups are separated from
-your other groups before doing age-standardization, such as using
-<code>as.data.frame.table()</code> in conjunction with
-<code>xtabs()</code>.</p>
+your other groups before doing age-standardization using
+<code>split_sample_groups()</code>.</p>
 <p>Now, we have a standalone array for our age-standardized 35-64 age
 group. Similarly to <code>aggregate_samples()</code>, we can
 alternatively consolidate this into our main <code>samples</code> array
 by adding in values for the <code>bind_new</code> and
 <code>new_name</code> arguments:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">standardize_samples</span>(</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  samples,</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  std_pop,</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  margin_age,</span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  groups,</span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="at">bind_new =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="at">new_name =</span> <span class="st">&quot;35-64&quot;</span></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">standardize_samples</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  samples,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  std_pop,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  margin_age,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  groups,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="at">bind_new =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="at">new_name =</span> <span class="st">&quot;35-64&quot;</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>)</span></code></pre></div>
 <p>Now, our samples for <code>samples</code> are aggregated by year and
 age-standardized, and we have matching array values for
 <code>pop</code>. Note that if you plan on doing a mix of non-age
@@ -468,57 +462,57 @@ alter the results of any aggregation done afterward.</p>
 <div id="estimates-and-reliability" class="section level2">
 <h2>Estimates and Reliability</h2>
 <p>To get our medians, we simply put our samples into get_medians():</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>medians <span class="ot">&lt;-</span> <span class="fu">get_medians</span>(samples)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>medians <span class="ot">&lt;-</span> <span class="fu">get_medians</span>(samples)</span></code></pre></div>
 <p>Let’s get some reliability metrics for our dataset. First, let’s
 generate our relative precisions at 95% credibility using the
 <code>get_credible_interval()</code> and
 <code>get_relative_precision()</code> functions, then create a
 <code>logical</code> <code>array</code> that tells us which estimates
 are unreliable:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>ci <span class="ot">&lt;-</span> <span class="fu">get_credible_interval</span>(<span class="at">sample =</span> samples, <span class="at">perc_ci =</span> <span class="fl">0.95</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>rel_prec <span class="ot">&lt;-</span> <span class="fu">get_relative_precision</span>(medians, ci)</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>low_rel_prec <span class="ot">&lt;-</span> rel_prec <span class="sc">&lt;</span> <span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>ci <span class="ot">&lt;-</span> <span class="fu">get_credible_interval</span>(<span class="at">sample =</span> samples, <span class="at">perc_ci =</span> <span class="fl">0.95</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>rel_prec <span class="ot">&lt;-</span> <span class="fu">get_relative_precision</span>(medians, ci)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>low_rel_prec <span class="ot">&lt;-</span> rel_prec <span class="sc">&lt;</span> <span class="dv">1</span></span></code></pre></div>
 <p>Now, let’s generate a similar <code>logical</code> <code>array</code>
 for populations less than 1000 and use these criteria to create a set of
 suppressed medians. A median will be suppressed if it meets either of
 the two criteria. Note that since our samples are age-standardized, we
 also have to extend our <code>pop</code> array to match in size using
 the <code>aggregate_count()</code> function:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">aggregate_count</span>(pop, margin_age, <span class="at">groups =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">bind_new =</span> <span class="cn">TRUE</span>, <span class="at">new_name =</span> <span class="st">&quot;35-64&quot;</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">aggregate_count</span>(pop, margin_time, <span class="at">bind_new =</span> <span class="cn">TRUE</span>, <span class="at">new_name =</span> <span class="st">&quot;1988-1988&quot;</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>low_population <span class="ot">&lt;-</span> pop <span class="sc">&lt;</span> <span class="dv">1000</span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>medians_supp <span class="ot">&lt;-</span> medians</span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>medians_supp[low_rel_prec <span class="sc">|</span> low_population] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">aggregate_count</span>(pop, margin_age, <span class="at">groups =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">bind_new =</span> <span class="cn">TRUE</span>, <span class="at">new_name =</span> <span class="st">&quot;35-64&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">aggregate_count</span>(pop, margin_time, <span class="at">bind_new =</span> <span class="cn">TRUE</span>, <span class="at">new_name =</span> <span class="st">&quot;1988-1988&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>low_population <span class="ot">&lt;-</span> pop <span class="sc">&lt;</span> <span class="dv">1000</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>medians_supp <span class="ot">&lt;-</span> medians</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>medians_supp[low_rel_prec <span class="sc">|</span> low_population] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
 <p>Let’s now map our suppressed estimates:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>est_3544 <span class="ot">&lt;-</span> medians_supp[, <span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;1988&quot;</span>]</span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">ggplot</span>(mishp) <span class="sc">+</span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> est_3544)) <span class="sc">+</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Smoothed Myocardial Infarction Death Rates in MI, Ages 35-44, 1988&quot;</span>,</span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Deaths per 100,000&quot;</span></span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>() <span class="sc">+</span></span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>est_3544 <span class="ot">&lt;-</span> medians_supp[, <span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;1988&quot;</span>]</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">ggplot</span>(mishp) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> est_3544)) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Smoothed Myocardial Infarction Death Rates in MI, Ages 35-44, 1988&quot;</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Deaths per 100,000&quot;</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>() <span class="sc">+</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
 <pre><code>#&gt; NULL</code></pre>
 <p>With our samples available, we can generate estimates from different
 credible intervals without having to re-run the model:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>ci <span class="ot">&lt;-</span> <span class="fu">get_credible_interval</span>(samples, <span class="fl">0.995</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>rel_prec50 <span class="ot">&lt;-</span> <span class="fu">get_relative_precision</span>(medians, ci)</span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>low_rel_prec <span class="ot">&lt;-</span> rel_prec50 <span class="sc">&lt;</span> <span class="dv">1</span></span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>medians_supp <span class="ot">&lt;-</span> medians</span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>medians_supp[low_rel_prec <span class="sc">|</span> low_population] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>est_3544 <span class="ot">&lt;-</span> medians_supp[, <span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;1988&quot;</span>]</span>
-<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="fu">ggplot</span>(mishp) <span class="sc">+</span></span>
-<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> est_3544)) <span class="sc">+</span></span>
-<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Smoothed Myocardial Infarction Death Rates in MI, 99.5% CI, Ages 35-44, 1988&quot;</span>,</span>
-<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Deaths per 100,000&quot;</span></span>
-<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>() <span class="sc">+</span></span>
-<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>ci <span class="ot">&lt;-</span> <span class="fu">get_credible_interval</span>(samples, <span class="fl">0.995</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>rel_prec50 <span class="ot">&lt;-</span> <span class="fu">get_relative_precision</span>(medians, ci)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>low_rel_prec <span class="ot">&lt;-</span> rel_prec50 <span class="sc">&lt;</span> <span class="dv">1</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>medians_supp <span class="ot">&lt;-</span> medians</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>medians_supp[low_rel_prec <span class="sc">|</span> low_population] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>est_3544 <span class="ot">&lt;-</span> medians_supp[, <span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;1988&quot;</span>]</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="fu">ggplot</span>(mishp) <span class="sc">+</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> est_3544)) <span class="sc">+</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Smoothed Myocardial Infarction Death Rates in MI, 99.5% CI, Ages 35-44, 1988&quot;</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Deaths per 100,000&quot;</span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>() <span class="sc">+</span></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
 <pre><code>#&gt; NULL</code></pre>
 <p>We can even use these samples to learn more about our data. Let’s say
 we are interested in figuring out if a rate estimate is statistically
@@ -526,18 +520,18 @@ significantly greater than or less than the overall state rate. We can
 calculate a crude state rate for our 35-44 age group, then compare that
 against our samples. Note that we can make statistical significance
 comparisons, even if our rates are unreliable:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>crude_3544 <span class="ot">&lt;-</span> <span class="fu">sum</span>(mod_mst<span class="sc">$</span>data<span class="sc">$</span>Y[, <span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;1988&quot;</span>]) <span class="sc">/</span> <span class="fu">sum</span>(mod_mst<span class="sc">$</span>data<span class="sc">$</span>n[, <span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;1988&quot;</span>]) <span class="sc">*</span> <span class="fl">1e5</span></span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>sample_3544 <span class="ot">&lt;-</span> samples[, <span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;1988&quot;</span>, ]</span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>p_higher <span class="ot">&lt;-</span> <span class="fu">apply</span>(sample_3544, <span class="dv">1</span>, \(county) <span class="fu">mean</span>(county <span class="sc">&gt;</span> crude_3544)) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="fu">ggplot</span>(mishp) <span class="sc">+</span></span>
-<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> p_higher)) <span class="sc">+</span></span>
-<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Probability that County Rate &gt; State Rate MI, Ages 35-44, 1988&quot;</span>,</span>
-<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Probability&quot;</span></span>
-<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a>  <span class="fu">scale_fill_continuous</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>, <span class="at">trans =</span> <span class="st">&quot;reverse&quot;</span>) <span class="sc">+</span></span>
-<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>crude_3544 <span class="ot">&lt;-</span> <span class="fu">sum</span>(mod_mst<span class="sc">$</span>data<span class="sc">$</span>Y[, <span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;1988&quot;</span>]) <span class="sc">/</span> <span class="fu">sum</span>(mod_mst<span class="sc">$</span>data<span class="sc">$</span>n[, <span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;1988&quot;</span>]) <span class="sc">*</span> <span class="fl">1e5</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>sample_3544 <span class="ot">&lt;-</span> samples[, <span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;1988&quot;</span>, ]</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>p_higher <span class="ot">&lt;-</span> <span class="fu">apply</span>(sample_3544, <span class="dv">1</span>, \(county) <span class="fu">mean</span>(county <span class="sc">&gt;</span> crude_3544)) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="fu">ggplot</span>(mishp) <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> p_higher)) <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Probability that County Rate &gt; State Rate MI, Ages 35-44, 1988&quot;</span>,</span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Probability&quot;</span></span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a>  <span class="fu">scale_fill_continuous</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>, <span class="at">trans =</span> <span class="st">&quot;reverse&quot;</span>) <span class="sc">+</span></span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
 <pre><code>#&gt; NULL</code></pre>
 <p>On this map, we can see that much of the northern Lower Peninsula is
 significantly lower than the state rate, whereas the southern portion of

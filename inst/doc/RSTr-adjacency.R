@@ -5,15 +5,24 @@ knitr::opts_chunk$set(
 )
 library(ggplot2)
 library(RSTr)
-is_cran <- identical(Sys.getenv("NOT_CRAN"), "false")
-if (Sys.getenv("NOT_CRAN") == "") is_cran <- TRUE
+if (!requireNamespace("sf", quietly = TRUE) ||
+    !requireNamespace("spdep", quietly = TRUE)) {
+  knitr::knit_exit()
+}
+is_cran <- !identical(Sys.getenv("NOT_CRAN"), "true")
+
 
 ## ----results = "hide"---------------------------------------------------------
 head(mamap)
 
-## -----------------------------------------------------------------------------
-ma_shp <- sf::st_as_sf(mamap[order(mamap$GEOID), ])
-ma_adj <- spdep::poly2nb(ma_shp)
+## ----eval = !is_cran----------------------------------------------------------
+# ma_shp <- sf::st_as_sf(mamap[order(mamap$GEOID), ])
+# ma_adj <- spdep::poly2nb(ma_shp)
+
+## ----eval = is_cran, echo = FALSE---------------------------------------------
+# The lines above cause segfault issues when trying to run checks on clang-san. This chunk will load in ma_adj identically to above.
+ma_adj <- readRDS(system.file("extdata", "ma_adj.Rds", package = "RSTr"))
+ma_shp <- mamap
 
 ## -----------------------------------------------------------------------------
 ma_adj

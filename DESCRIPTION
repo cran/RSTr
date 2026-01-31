@@ -1,8 +1,7 @@
 Package: RSTr
 Type: Package
 Title: Gibbs Samplers for Discrete Bayesian Spatiotemporal Models
-Version: 1.0.0
-Date: 2026-01-08
+Version: 1.1.4
 Authors@R: 
   c(person(given = "David", 
            family = "DeLara", 
@@ -20,18 +19,17 @@ Encoding: UTF-8
 LinkingTo: Rcpp (>= 1.1.0), RcppArmadillo (>= 15.2.2.1), RcppDist (>=
         0.1.1.1)
 Suggests: ggplot2, knitr, rmarkdown, sf, testthat (>= 3.0.0)
-Imports: abind, Rcpp (>= 1.1.0), RcppArmadillo (>= 15.2.2.1), RcppDist
-        (>= 0.1.1.1), spdep
+Imports: abind, matrixStats, spdep
 Depends: R (>= 4.3.0)
 LazyData: true
 RoxygenNote: 7.3.3
 VignetteBuilder: knitr, rmarkdown
 Config/testthat/edition: 3
 NeedsCompilation: yes
-Packaged: 2026-01-13 00:49:57 UTC; dave
+Packaged: 2026-01-31 05:48:27 UTC; dave
 Author: David DeLara [aut, cre] (ORCID:
     <https://orcid.org/0000-0003-0485-7549>),
   Centers for Disease Control and Prevention [aut, cph]
     (https://ror.org/042twtr12)
 Repository: CRAN
-Date/Publication: 2026-01-17 20:10:16 UTC
+Date/Publication: 2026-01-31 06:40:02 UTC

@@ -357,20 +357,15 @@ estimates for <code>lambda</code> based on our example Michigan dataset.
 To extract rates from an <code>RSTr</code> object, we can simply run
 <code>get_estimates()</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">mstcar</span>(<span class="at">name =</span> <span class="st">&quot;my_test_model&quot;</span>, <span class="at">data =</span> miheart, <span class="at">adjacency =</span> miadj)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># For computational reasons, full model fitting is not run during CRAN checks.</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># When building on CRAN, this vignette loads a pre-fitted example model included with the package.</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co"># The pkgdown website shows the full model-fitting workflow.</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>example_dir <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="at">package =</span> <span class="st">&quot;RSTr&quot;</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">load_model</span>(<span class="st">&quot;mstcar_example&quot;</span>, example_dir)</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>estimates <span class="ot">&lt;-</span> <span class="fu">get_estimates</span>(mod_mst, <span class="at">rates_per =</span> <span class="fl">1e5</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">head</span>(estimates)</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;   county group year  medians ci_lower ci_upper rel_prec events population</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; 1  26001 35-44 1979 41.09875 31.76009 47.11024 2.677417      1        964</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 2  26003 35-44 1979 61.79864 50.74198 80.73919 2.060146      1       1011</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; 3  26005 35-44 1979 23.44843 18.67969 28.12923 2.481436      0       9110</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; 4  26007 35-44 1979 38.04293 26.32669 48.99415 1.678306      0       3650</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; 5  26009 35-44 1979 36.87313 31.41068 44.70636 2.773316      0       1763</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; 6  26011 35-44 1979 36.02715 32.00151 47.83611 2.275216      0       1470</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>estimates <span class="ot">&lt;-</span> <span class="fu">get_estimates</span>(mod_mst, <span class="at">rates_per =</span> <span class="fl">1e5</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">head</span>(estimates)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;   county group year  medians ci_lower ci_upper rel_prec events population</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; 1  26001 35-44 1979 24.17566 18.90347 35.37604 1.467631      1        964</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; 2  26003 35-44 1979 60.64569 48.28666 76.15700 2.175994      1       1011</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 3  26005 35-44 1979 20.57092 16.59628 23.37615 3.034115      0       9110</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 4  26007 35-44 1979 24.73026 17.37052 31.64529 1.732446      0       3650</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 5  26009 35-44 1979 32.19631 26.36770 40.97872 2.203564      0       1763</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 6  26011 35-44 1979 37.52907 23.49114 48.33818 1.510404      0       1470</span></span></code></pre></div>
 </div>
 <div id="the-age_standardization-function" class="section level2">
 <h2>The <code>age_standardization()</code> function</h2>
@@ -396,8 +391,26 @@ this argument blank.</p></li>
 </ul>
 <p>Once we have our <code>std_pop</code> vector, we can age-standardize
 our estimates:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>std_pop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">113154</span>, <span class="dv">100640</span>, <span class="dv">95799</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">age_standardize</span>(mod_mst, std_pop, <span class="at">new_name =</span> <span class="st">&quot;35-64&quot;</span>, <span class="at">groups =</span> <span class="fu">c</span>(<span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;45-54&quot;</span>, <span class="st">&quot;55-64&quot;</span>))</span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>std_pop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">113154</span>, <span class="dv">100640</span>, <span class="dv">95799</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">age_standardize</span>(mod_mst, std_pop, <span class="at">new_name =</span> <span class="st">&quot;35-64&quot;</span>, <span class="at">groups =</span> <span class="fu">c</span>(<span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;45-54&quot;</span>, <span class="st">&quot;55-64&quot;</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>mod_mst</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; RSTr object:</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; Model name: mstcar_example </span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; Model type: MSTCAR </span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; Data likelihood: binomial </span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; Estimate Credible Interval: 95% </span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; Number of geographic units: 83 </span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; Number of samples: 2200 </span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; Estimates age-standardized: Yes </span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; Age-standardized groups: 35-64 </span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: No</span></span></code></pre></div>
+<p>Notice now that the <code>mod_mst</code> object indicates we have
+age-standardized our estimates and the names of our age-standardized
+group. We can also add on to our list of age-standardized estimates by
+simply specifying a different group:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>std_pop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">68775</span>, <span class="dv">34116</span>, <span class="dv">9888</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">age_standardize</span>(mod_mst, std_pop, <span class="at">new_name =</span> <span class="st">&quot;65up&quot;</span>, <span class="at">groups =</span> <span class="fu">c</span>(<span class="st">&quot;65-74&quot;</span>, <span class="st">&quot;75-84&quot;</span>, <span class="st">&quot;85+&quot;</span>))</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>mod_mst</span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; RSTr object:</span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -406,16 +419,15 @@ our estimates:</p>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; Data likelihood: binomial </span></span>
 <span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; Estimate Credible Interval: 95% </span></span>
 <span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; Number of geographic units: 83 </span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; Number of samples: 3000 </span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; Number of samples: 2200 </span></span>
 <span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; Estimates age-standardized: Yes </span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; Age-standardized groups: 35-64 </span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; Age-standardized groups: 35-64 65up </span></span>
 <span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: No</span></span></code></pre></div>
-<p>Notice now that the <code>mod_mst</code> object indicates we have
-age-standardized our estimates and the names of our age-standardized
-group. We can also add on to our list of age-standardized estimates by
-simply specifying a different group:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>std_pop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">68775</span>, <span class="dv">34116</span>, <span class="dv">9888</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">age_standardize</span>(mod_mst, std_pop, <span class="at">new_name =</span> <span class="st">&quot;65up&quot;</span>, <span class="at">groups =</span> <span class="fu">c</span>(<span class="st">&quot;65-74&quot;</span>, <span class="st">&quot;75-84&quot;</span>, <span class="st">&quot;85+&quot;</span>))</span>
+<p>If we want to generate estimates for <em>all</em> groups, i.e. 35 and
+up, we can omit the <code>groups</code> argument and expand
+<code>std_pop</code> to include all of our populations:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>std_pop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">113154</span>, <span class="dv">100640</span>, <span class="dv">95799</span>, <span class="dv">68775</span>, <span class="dv">34116</span>, <span class="dv">9888</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">age_standardize</span>(mod_mst, std_pop, <span class="at">new_name =</span> <span class="st">&quot;35up&quot;</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>mod_mst</span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; RSTr object:</span></span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -424,36 +436,19 @@ simply specifying a different group:</p>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; Data likelihood: binomial </span></span>
 <span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; Estimate Credible Interval: 95% </span></span>
 <span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; Number of geographic units: 83 </span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Number of samples: 3000 </span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Number of samples: 2200 </span></span>
 <span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; Estimates age-standardized: Yes </span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Age-standardized groups: 35-64 65up </span></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: No</span></span></code></pre></div>
-<p>If we want to generate estimates for <em>all</em> groups, i.e. 35 and
-up, we can omit the <code>groups</code> argument and expand
-<code>std_pop</code> to include all of our populations:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>std_pop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">113154</span>, <span class="dv">100640</span>, <span class="dv">95799</span>, <span class="dv">68775</span>, <span class="dv">34116</span>, <span class="dv">9888</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">age_standardize</span>(mod_mst, std_pop, <span class="at">new_name =</span> <span class="st">&quot;35up&quot;</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>mod_mst</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; RSTr object:</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; Model name: mstcar_example </span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; Model type: MSTCAR </span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; Data likelihood: binomial </span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; Estimate Credible Interval: 95% </span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; Number of geographic units: 83 </span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; Number of samples: 3000 </span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; Estimates age-standardized: Yes </span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; Age-standardized groups: 35-64 65up 35up </span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: No</span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>mst_estimates_as <span class="ot">&lt;-</span> <span class="fu">get_estimates</span>(mod_mst)</span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="fu">head</span>(mst_estimates_as)</span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt;   county group year  medians ci_lower ci_upper rel_prec events population</span></span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; 1  26001 35-64 1979 202.9310 166.2747 242.0648 2.677538      7       3353</span></span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; 2  26003 35-64 1979 256.0684 214.3235 348.2249 1.912365     12       3105</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; 3  26005 35-64 1979 126.2409 112.8141 147.4087 3.649160     27      23926</span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt; 4  26007 35-64 1979 174.0603 154.6135 209.3011 3.182813     15      10000</span></span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; 5  26009 35-64 1979 184.0658 163.5568 205.2774 4.411868     11       5152</span></span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; 6  26011 35-64 1979 207.9429 185.7425 231.7124 4.523455      8       4517</span></span></code></pre></div>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Age-standardized groups: 35-64 65up 35up </span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: No</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>mst_estimates_as <span class="ot">&lt;-</span> <span class="fu">get_estimates</span>(mod_mst)</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="fu">head</span>(mst_estimates_as)</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;   county group year  medians ci_lower ci_upper rel_prec events population</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt; 1  26001 35-64 1979 154.4839 139.2431 170.0486 5.014813      7       3353</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt; 2  26003 35-64 1979 285.1687 251.9023 298.3916 6.134078     12       3105</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; 3  26005 35-64 1979 113.8297 104.2205 125.8577 5.260842     27      23926</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; 4  26007 35-64 1979 152.9456 141.5888 165.1699 6.485954     15      10000</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt; 5  26009 35-64 1979 158.5001 143.1010 178.9157 4.425559     11       5152</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt; 6  26011 35-64 1979 202.9706 185.8431 224.2937 5.278736      8       4517</span></span></code></pre></div>
 <p>Now, <code>get_estimates(mod_mst)</code> shows the age-standardized
 estimates as opposed to our non-standardized estimates. Should you want
 to see the non-standardized estimates instead, you can set the argument

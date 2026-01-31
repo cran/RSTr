@@ -451,11 +451,6 @@ run out-of-the-box:</p>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">dir =</span> <span class="fu">tempdir</span>(),</span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">1234</span></span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># For computational reasons, full model fitting is not run during CRAN checks.</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># When building on CRAN, this vignette loads a pre-fitted example model included with the package.</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co"># The pkgdown website shows the full model-fitting workflow.</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>example_dir <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="at">package =</span> <span class="st">&quot;RSTr&quot;</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">load_model</span>(<span class="st">&quot;mstcar_example&quot;</span>, example_dir)</span></code></pre></div>
 <p>Here, we use the <code>mstcar()</code> function to specify our model.
 <code>mstcar()</code> accepts a few different arguments in this
 case:</p>
@@ -518,17 +513,17 @@ model functions, read <code>vignette(&quot;RSTr-car&quot;)</code>.</p>
 preparation: within the function, the model is set up, samples are
 generated, and our medians are estimated. Once the function finishes, we
 can get an overview of our model:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>mod_mst</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; RSTr object:</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; Model name: mstcar_example </span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; Model type: MSTCAR </span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; Data likelihood: binomial </span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; Estimate Credible Interval: 95% </span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; Number of geographic units: 83 </span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; Number of samples: 3000 </span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; Estimates age-standardized: No </span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: No</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>mod_mst</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; RSTr object:</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; Model name: mstcar_example </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; Model type: MSTCAR </span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; Data likelihood: binomial </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; Estimate Credible Interval: 95% </span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; Number of geographic units: 83 </span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; Number of samples: 2200 </span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; Estimates age-standardized: No </span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: No</span></span></code></pre></div>
 <p>Here, we get a birds-eye-view of the model, including the model we
 used (MSTCAR), the data likelihood type, the number of geographic units,
 and whether our estimates have been age-standardized or suppressed along
@@ -537,15 +532,15 @@ can get a more detailed look at our estimates. For this type of
 mortality data, it is common to observe the rates per 100,000
 population, so we set the <code>rates_per</code> argument in
 <code>get_estimates()</code> to 1e5:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>mst_estimates <span class="ot">&lt;-</span> <span class="fu">get_estimates</span>(mod_mst, <span class="at">rates_per =</span> <span class="fl">1e5</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">head</span>(mst_estimates)</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;   county group year  medians ci_lower ci_upper rel_prec events population</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; 1  26001 35-44 1979 41.09875 31.76009 47.11024 2.677417      1        964</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; 2  26003 35-44 1979 61.79864 50.74198 80.73919 2.060146      1       1011</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 3  26005 35-44 1979 23.44843 18.67969 28.12923 2.481436      0       9110</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 4  26007 35-44 1979 38.04293 26.32669 48.99415 1.678306      0       3650</span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 5  26009 35-44 1979 36.87313 31.41068 44.70636 2.773316      0       1763</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 6  26011 35-44 1979 36.02715 32.00151 47.83611 2.275216      0       1470</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>mst_estimates <span class="ot">&lt;-</span> <span class="fu">get_estimates</span>(mod_mst, <span class="at">rates_per =</span> <span class="fl">1e5</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">head</span>(mst_estimates)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;   county group year  medians ci_lower ci_upper rel_prec events population</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; 1  26001 35-44 1979 24.17566 18.90347 35.37604 1.467631      1        964</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 2  26003 35-44 1979 60.64569 48.28666 76.15700 2.175994      1       1011</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; 3  26005 35-44 1979 20.57092 16.59628 23.37615 3.034115      0       9110</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; 4  26007 35-44 1979 24.73026 17.37052 31.64529 1.732446      0       3650</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; 5  26009 35-44 1979 32.19631 26.36770 40.97872 2.203564      0       1763</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; 6  26011 35-44 1979 37.52907 23.49114 48.33818 1.510404      0       1470</span></span></code></pre></div>
 <p>The <code>mst_estimates</code> object contains in-depth information
 about our model estimates, including the medians, the credible
 intervals, the relative precisions, and the event/population counts;
@@ -561,32 +556,32 @@ of interest, their associated standard populations, and the name we want
 to give them. Since we are using data from 1979-1988, we can use 1980
 standard populations from <a href="https://seer.cancer.gov/stdpopulations/stdpop.19ages.html">NIH</a>
 to generate a <code>std_pop</code> standard population vector:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>std_pop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">68775</span>, <span class="dv">34116</span>, <span class="dv">9888</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">age_standardize</span>(mod_mst, std_pop, <span class="at">new_name =</span> <span class="st">&quot;35-64&quot;</span>, <span class="at">groups =</span> <span class="fu">c</span>(<span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;45-54&quot;</span>, <span class="st">&quot;55-64&quot;</span>))</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>mod_mst</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; RSTr object:</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; Model name: mstcar_example </span></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; Model type: MSTCAR </span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; Data likelihood: binomial </span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; Estimate Credible Interval: 95% </span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; Number of geographic units: 83 </span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Number of samples: 3000 </span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; Estimates age-standardized: Yes </span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Age-standardized groups: 35-64 </span></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: No</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>std_pop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">68775</span>, <span class="dv">34116</span>, <span class="dv">9888</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">age_standardize</span>(mod_mst, std_pop, <span class="at">new_name =</span> <span class="st">&quot;35-64&quot;</span>, <span class="at">groups =</span> <span class="fu">c</span>(<span class="st">&quot;35-44&quot;</span>, <span class="st">&quot;45-54&quot;</span>, <span class="st">&quot;55-64&quot;</span>))</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>mod_mst</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; RSTr object:</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; Model name: mstcar_example </span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; Model type: MSTCAR </span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; Data likelihood: binomial </span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; Estimate Credible Interval: 95% </span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; Number of geographic units: 83 </span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; Number of samples: 2200 </span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; Estimates age-standardized: Yes </span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; Age-standardized groups: 35-64 </span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: No</span></span></code></pre></div>
 <p>Notice now that the <code>mod_mst</code> object indicates we have
 age-standardized our estimates and the names of our age-standardized
 groups.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>mst_estimates_as <span class="ot">&lt;-</span> <span class="fu">get_estimates</span>(mod_mst)</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">head</span>(mst_estimates_as)</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt;   county group year   medians  ci_lower  ci_upper rel_prec events population</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; 1  26001 35-64 1979 112.06334  91.81667 134.54504 2.622692      7       3353</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; 2  26003 35-64 1979 145.06894 122.97462 200.59999 1.868834     12       3105</span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; 3  26005 35-64 1979  66.76366  59.88380  77.08016 3.882430     27      23926</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; 4  26007 35-64 1979  94.78308  80.02914 114.43762 2.754644     15      10000</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; 5  26009 35-64 1979 100.56027  88.18623 110.67138 4.472296     11       5152</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; 6  26011 35-64 1979 112.28314 102.10809 126.49672 4.603913      8       4517</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>mst_estimates_as <span class="ot">&lt;-</span> <span class="fu">get_estimates</span>(mod_mst)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">head</span>(mst_estimates_as)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt;   county group year   medians  ci_lower  ci_upper rel_prec events population</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; 1  26001 35-64 1979  81.59864  70.66604  90.29916 4.156173      7       3353</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; 2  26003 35-64 1979 139.14181 121.75585 149.13035 5.082899     12       3105</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; 3  26005 35-64 1979  59.42633  54.99570  66.29480 5.259388     27      23926</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; 4  26007 35-64 1979  79.23903  69.96587  87.06434 4.634275     15      10000</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; 5  26009 35-64 1979  83.62632  74.59693  96.21183 3.868920     11       5152</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; 6  26011 35-64 1979 111.08350 103.65304 121.75301 6.137220      8       4517</span></span></code></pre></div>
 <p>Now, <code>get_estimates(mod_mst)</code> shows the age-standardized
 estimates. Should you want to see those instead, you can set the
 argument <code>standardized = FALSE</code>.</p>
@@ -605,36 +600,36 @@ interval), and for myocardial infarction death rates, we typically aim
 for a population threshold of at least 1,000. Using the
 <code>suppress_estimates()</code> function, we can generate suppressed
 estimates for our age-standardized rates:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">suppress_estimates</span>(mod_mst, <span class="at">threshold =</span> <span class="fl">1e3</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>mod_mst</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; RSTr object:</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; Model name: mstcar_example </span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Model type: MSTCAR </span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; Data likelihood: binomial </span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; Estimate Credible Interval: 95% </span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; Number of geographic units: 83 </span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; Number of samples: 3000 </span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; Estimates age-standardized: Yes </span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; Age-standardized groups: 35-64 </span></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: Yes </span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; Number of reliable age-standardized rates: 820 / 830 (98.8%)</span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>mst_estimates_as <span class="ot">&lt;-</span> <span class="fu">get_estimates</span>(mod_mst)</span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="fu">head</span>(mst_estimates_as)</span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt;   county group year   medians medians_suppressed  ci_lower  ci_upper rel_prec</span></span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; 1  26001 35-64 1979 112.06334          112.06334  91.81667 134.54504 2.622692</span></span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; 2  26003 35-64 1979 145.06894          145.06894 122.97462 200.59999 1.868834</span></span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt; 3  26005 35-64 1979  66.76366           66.76366  59.88380  77.08016 3.882430</span></span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt; 4  26007 35-64 1979  94.78308           94.78308  80.02914 114.43762 2.754644</span></span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; 5  26009 35-64 1979 100.56027          100.56027  88.18623 110.67138 4.472296</span></span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; 6  26011 35-64 1979 112.28314          112.28314 102.10809 126.49672 4.603913</span></span>
-<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt;   events population</span></span>
-<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt; 1      7       3353</span></span>
-<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a><span class="co">#&gt; 2     12       3105</span></span>
-<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="co">#&gt; 3     27      23926</span></span>
-<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a><span class="co">#&gt; 4     15      10000</span></span>
-<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="co">#&gt; 5     11       5152</span></span>
-<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="co">#&gt; 6      8       4517</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>mod_mst <span class="ot">&lt;-</span> <span class="fu">suppress_estimates</span>(mod_mst, <span class="at">threshold =</span> <span class="fl">1e3</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>mod_mst</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; RSTr object:</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; Model name: mstcar_example </span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; Model type: MSTCAR </span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; Data likelihood: binomial </span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; Estimate Credible Interval: 95% </span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; Number of geographic units: 83 </span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; Number of samples: 2200 </span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; Estimates age-standardized: Yes </span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; Age-standardized groups: 35-64 </span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; Estimates suppressed: Yes </span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; Number of reliable age-standardized rates: 246 / 249 (98.8%)</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>mst_estimates_as <span class="ot">&lt;-</span> <span class="fu">get_estimates</span>(mod_mst)</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="fu">head</span>(mst_estimates_as)</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt;   county group year   medians medians_suppressed  ci_lower  ci_upper rel_prec</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; 1  26001 35-64 1979  81.59864           81.59864  70.66604  90.29916 4.156173</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; 2  26003 35-64 1979 139.14181          139.14181 121.75585 149.13035 5.082899</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; 3  26005 35-64 1979  59.42633           59.42633  54.99570  66.29480 5.259388</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt; 4  26007 35-64 1979  79.23903           79.23903  69.96587  87.06434 4.634275</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; 5  26009 35-64 1979  83.62632           83.62632  74.59693  96.21183 3.868920</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; 6  26011 35-64 1979 111.08350          111.08350 103.65304 121.75301 6.137220</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt;   events population</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt; 1      7       3353</span></span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="co">#&gt; 2     12       3105</span></span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="co">#&gt; 3     27      23926</span></span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="co">#&gt; 4     15      10000</span></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a><span class="co">#&gt; 5     11       5152</span></span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a><span class="co">#&gt; 6      8       4517</span></span></code></pre></div>
 <p><code>mod_mst</code> now shows us that our estimates are suppressed
 and indicates the number of reliable rates.</p>
 <p>If you want to learn more about <code>get_estimates()</code>,
@@ -648,28 +643,28 @@ read <code>vignette(&quot;RSTr-estimates&quot;)</code>.</p>
 with a map. Using <code>ggplot</code> (or your favorite mapping
 package), Let’s see how the (non-age-standardized) estimates were
 smoothed:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Original Myocardial Infarction Death Rates in MI, Ages 35-64, 1988</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>estimates_88 <span class="ot">&lt;-</span> mst_estimates_as[mst_estimates_as<span class="sc">$</span>year <span class="sc">==</span> <span class="st">&quot;1988&quot;</span>, ]</span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>estimates_3564 <span class="ot">&lt;-</span> estimates_88[estimates_88<span class="sc">$</span>group <span class="sc">==</span> <span class="st">&quot;35-64&quot;</span>, ]</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>raw_3564 <span class="ot">&lt;-</span> (estimates_3564<span class="sc">$</span>events <span class="sc">/</span> estimates_3564<span class="sc">$</span>population <span class="sc">*</span> <span class="fl">1e5</span>)</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">ggplot</span>(mishp) <span class="sc">+</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> raw_3564)) <span class="sc">+</span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Raw Myocardial Infarction Death Rates in MI, Ages 65 and up, 1988&quot;</span>,</span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Deaths per 100,000&quot;</span></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>() <span class="sc">+</span></span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
-<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co"># Spatially Smoothed MI Death Rates in MI</span></span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>est_3564 <span class="ot">&lt;-</span> estimates_3564<span class="sc">$</span>medians</span>
-<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="fu">ggplot</span>(mishp) <span class="sc">+</span></span>
-<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> est_3564)) <span class="sc">+</span></span>
-<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Smoothed Myocardial Infarction Death Rates in MI, Ages 35-64, 1988&quot;</span>,</span>
-<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Deaths per 100,000&quot;</span></span>
-<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>() <span class="sc">+</span></span>
-<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Original Myocardial Infarction Death Rates in MI, Ages 35-64, 1988</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>estimates_88 <span class="ot">&lt;-</span> mst_estimates_as[mst_estimates_as<span class="sc">$</span>year <span class="sc">==</span> <span class="st">&quot;1988&quot;</span>, ]</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>estimates_3564 <span class="ot">&lt;-</span> estimates_88[estimates_88<span class="sc">$</span>group <span class="sc">==</span> <span class="st">&quot;35-64&quot;</span>, ]</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>raw_3564 <span class="ot">&lt;-</span> (estimates_3564<span class="sc">$</span>events <span class="sc">/</span> estimates_3564<span class="sc">$</span>population <span class="sc">*</span> <span class="fl">1e5</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fu">ggplot</span>(mishp) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> raw_3564)) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Raw Myocardial Infarction Death Rates in MI, Ages 35-64, 1988&quot;</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Deaths per 100,000&quot;</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>() <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co"># Spatially Smoothed MI Death Rates in MI</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>est_3564 <span class="ot">&lt;-</span> estimates_3564<span class="sc">$</span>medians</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="fu">ggplot</span>(mishp) <span class="sc">+</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> est_3564)) <span class="sc">+</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Smoothed Myocardial Infarction Death Rates in MI, Ages 35-64, 1988&quot;</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Deaths per 100,000&quot;</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>() <span class="sc">+</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
 <pre><code>#&gt; NULL</code></pre>
 <p>This map helps us see how RSTr smooths rates. First, notice how the
 range of the two plots are different: the smoothed map has a smaller

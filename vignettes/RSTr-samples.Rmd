@@ -12,8 +12,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-is_cran <- identical(Sys.getenv("NOT_CRAN"), "false")
-if (Sys.getenv("NOT_CRAN") == "") is_cran <- TRUE
+is_cran <- !identical(Sys.getenv("NOT_CRAN"), "true")
+
 library(RSTr)
 library(ggplot2)
 ```
@@ -31,7 +31,7 @@ To begin, let's generate samples for a new model:
 mod_mst <- mstcar(name = "my_test_model", data = miheart, adjacency = miadj, seed = 1234)
 ```
 
-```{r, eval = is_cran}
+```{r, eval = is_cran, echo = FALSE}
 # For computational reasons, full model fitting is not run during CRAN checks.
 # When building on CRAN, this vignette loads a pre-fitted example model included with the package.
 # The pkgdown website shows the full model-fitting workflow.
@@ -100,7 +100,7 @@ groups <- c("35-44", "45-54", "55-64")
 samples_3564 <- standardize_samples(samples, std_pop, margin_age, groups)
 ```
 
-Note that there may be times where you have groups stratified by both age and other sociodemographic groups. In these cases, you'll have to refactor your sample array so that the age groups are separated from your other groups before doing age-standardization, such as using `as.data.frame.table()` in conjunction with `xtabs()`.
+Note that there may be times where you have groups stratified by both age and other sociodemographic groups. In these cases, you'll have to refactor your sample array so that the age groups are separated from your other groups before doing age-standardization using `split_sample_groups()`.
 
 Now, we have a standalone array for our age-standardized 35-64 age group. Similarly to `aggregate_samples()`, we can alternatively consolidate this into our main `samples` array by adding in values for the `bind_new` and `new_name` arguments:
 

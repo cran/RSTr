@@ -380,11 +380,7 @@ use this to generate our adjacency information.</p></li>
 <code>maexample</code> data, then generate some adjacency information
 using the <code>spdep</code> package:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>ma_shp <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_as_sf</span>(mamap[<span class="fu">order</span>(mamap<span class="sc">$</span>GEOID), ])</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>ma_adj <span class="ot">&lt;-</span> spdep<span class="sc">::</span><span class="fu">poly2nb</span>(ma_shp)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; Warning in spdep::poly2nb(ma_shp): some observations have no neighbours;</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; if this seems unexpected, try increasing the snap argument.</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; Warning in spdep::poly2nb(ma_shp): neighbour object has 3 sub-graphs;</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; if this sub-graph count seems unexpected, try increasing the snap argument.</span></span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>ma_adj <span class="ot">&lt;-</span> spdep<span class="sc">::</span><span class="fu">poly2nb</span>(ma_shp)</span></code></pre></div>
 <p><code>spdep::poly2nb()</code> takes the information in
 <code>ma_shp$geometry</code> and looks for any regions with touching
 boundaries (i.e., queen contiguity). <code>ma_adj</code> is a list that
@@ -417,17 +413,17 @@ neighbors:</p>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; Simple feature collection with 2 features and 12 fields</span></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; Dimension:     XY</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Bounding box:  xmin: -70.95137 ymin: 41.23796 xmax: -69.96018 ymax: 41.52178</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Bounding box:  xmin: -71.50308 ymin: 41.98508 xmax: -70.78146 ymax: 42.45012</span></span>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; Geodetic CRS:  NAD83</span></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt;      STATEFP COUNTYFP COUNTYNS       AFFGEOID GEOID      NAME         NAMELSAD</span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; 1252      25      007 00606930 0500000US25007 25007     Dukes     Dukes County</span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; 1577      25      019 00606936 0500000US25019 25019 Nantucket Nantucket County</span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;      STUSPS    STATE_NAME LSAD     ALAND     AWATER</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; 1252     MA Massachusetts   06 267292993 1004291414</span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; 1577     MA Massachusetts   06 119637319  666826424</span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt;                            geometry</span></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; 1252 MULTIPOLYGON (((-70.8071 41...</span></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; 1577 MULTIPOLYGON (((-70.23405 4...</span></span></code></pre></div>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt;     STATEFP COUNTYFP COUNTYNS       AFFGEOID GEOID    NAME       NAMELSAD</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; 46       25      025 00606939 0500000US25025 25025 Suffolk Suffolk County</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; 847      25      021 00606937 0500000US25021 25021 Norfolk Norfolk County</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;     STUSPS    STATE_NAME LSAD      ALAND    AWATER</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; 46      MA Massachusetts   06  150875411 160499488</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; 847     MA Massachusetts   06 1025902478 124958171</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt;                           geometry</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; 46  MULTIPOLYGON (((-70.93091 4...</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; 847 MULTIPOLYGON (((-70.84466 4...</span></span></code></pre></div>
 <p>According to this, our two no-link counties are Dukes and Nantucket
 (FIPS 25007 and 25019, respectively). Let’s check out a ggplot of our
 data to further investigate:</p>
@@ -447,9 +443,9 @@ associated with which indices:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>county_key <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(ma_shp<span class="sc">$</span>NAME)</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">names</span>(county_key) <span class="ot">&lt;-</span> ma_shp<span class="sc">$</span>NAME</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>county_key</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; Barnstable  Berkshire    Bristol      Dukes      Essex   Franklin    Hampden </span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt;  Middlesex    Bristol  Hampshire    Suffolk   Plymouth  Worcester      Essex </span></span>
 <span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt;          1          2          3          4          5          6          7 </span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt;  Hampshire  Middlesex  Nantucket    Norfolk   Plymouth    Suffolk  Worcester </span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; Barnstable    Hampden    Norfolk   Franklin      Dukes  Nantucket  Berkshire </span></span>
 <span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt;          8          9         10         11         12         13         14</span></span></code></pre></div>
 <p>We can see that Barnstable has an index of 1, Dukes has an index of
 4, and Nantucket has an index of 10. We can use the
